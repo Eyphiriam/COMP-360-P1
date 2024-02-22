@@ -17,7 +17,7 @@ public class LexicalAnalyzer {
      */
     public static void main(String[] args) throws FileNotFoundException {        
         //Take code input from file
-    	Scanner reader = new Scanner(new File("C:\\Users\\jazmi\\OneDrive\\Documents\\COMP 360- Programming Languages Doc\\Project 1\\input.txt"));
+    	Scanner reader = new Scanner(new File("C:\\Users\\matth\\Downloads\\\code.txt");
         
         
         //ArrayList for lexemes and HashTable for the Symbol Table
