@@ -47,16 +47,18 @@ public class Parser {
     	    if (parseIdent(scanner)) {
     	        // If parseIdent returns true, proceed to check the next tokens
     	        String nextToken1 = scanner.next();
-    	        String nextToken2 = scanner.next();
-    	        String nextToken3 = scanner.next();
-    	        System.out.println("CHECK");
+    	        System.out.println(nextToken1);
+    	        //String nextToken2 = scanner.next();
+    	        // System.out.println(nextToken2);
+    	        //String nextToken3 = scanner.next();
+    	        // System.out.println(nextToken3);
+    	        //System.out.println("CHECK");
     	        
-    	        if (nextToken1.equals("(") && nextToken2.equals(")") && nextToken3.equals("{")) {
+    	        if (nextToken1.contains("(){")) {
     	            System.out.println("WORKS");
     	            // No need to consume more tokens, as we've already retrieved and checked them
-
-    	        	if (parseIdent(scanner) && scanner.next().equals("(") && scanner.next().equals(")") &&
-    	                    scanner.next().equals("{")) {
+    	        	if (parseDeclares(scanner) && parseLoop(scanner) &&
+    	                    parseAssignment(scanner)) {
     	        		return true;
     	        	}
     	            // return true; // Parsing succeeded
@@ -146,3 +148,4 @@ public class Parser {
         }
     }
 }
+
