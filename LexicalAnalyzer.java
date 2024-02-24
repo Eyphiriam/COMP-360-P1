@@ -1,3 +1,4 @@
+package lexicalanalyzer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -5,33 +6,47 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
-import parse.ParseTree;
-import parse;
-
+import java.util.HashMap;
+import java.util.Map;
 
 public class LexicalAnalyzer {
+
+    /**
+     * @param args the command line arguments
+     * @throws java.io.FileNotFoundException
+     */
     public static void main(String[] args) throws FileNotFoundException {        
         //Take code input from file
-    ArrayList<String> lines = new ArrayList<>(); // Declare the 'lines' variable
-    Scanner reader = new Scanner(new File("C:\\Users\\matth\\Downloads\\Sem 2, Junior Year\\COMP 360\\input.txt"));
-    while (reader.hasNextLine()) {
-        String str = reader.nextLine();
-        if (!(str.length() == 0)) {
-            String [] strSplit = str.trim().split("\\s+|\\s*,\\s*|\\;+|\\\"+|\\:+|\\[+|\\]+");     
-            List <String> list = Arrays.asList(strSplit);
-            lines.addAll(list);
-        }
-    }
-    reader.close();
-    List<String> lexemes = lines;
-    ParseTree parseTree = parse.parseExpression(lexemes);
-    System.out.println("The lexemes: ");
-    System.out.println(lines);
+    	Scanner reader = new Scanner(new File("C:\\Users\\jazmi\\OneDrive\\Documents\\COMP 360- Programming Languages Doc\\Project 1\\input.txt"));
         
+        
+        //ArrayList for lexemes and HashTable for the Symbol Table
+        ArrayList<String> lines = new ArrayList<>();
+        Map<String, List<String>> symbolTable = new HashMap<String, List<String>>();
+        
+        //Reads every line and then splits everything into lexemes
+        while (reader.hasNextLine()) {
+            String str = reader.nextLine(); //Reads the lines
+            if (!(str.length() == 0)) {     //If no blank lines detected, then continue
+            	String[] strSplit = str.trim().split("\\s+|\\s*,\\s*|\\;+|\\\"+|\\:+|\\[+|\\]+");
+     //Regex for splitting the code into lexemes          
+                
+               // List <String> list = Arrays.asList(strSplit);       //Save the lexeme array into a Container List
+                //lines.addAll(list);   
+            	//Add the Container List to the ArrayList or HashTable
+            	for (String lexemes: strSplit) {
+            		lines.add(lexemes);
+            	}
+            }
+        }
+        
+        System.out.print("The Lexemes: ");
+        System.out.println(lines);
+        System.out.println("TOKENS:");       
         //Add values from ArrayList to HashMap Key keywords
         List<String> keywords = new ArrayList<String>(); 
         String [] keywordArray = lines.toArray(new String [0]);
-        if (lines.contains("int") || lines.contains("float") || lines.contains("while") || lines.contains("void")) {         
+        if (lines.contains("int") || lines.contains("while") || lines.contains("void")) {         
         	 for (int count = 0;  count < keywordArray.length; count++) {
              	if (keywordArray[count].equals("float")) {
                      // Add a descriptive label for left parenthesis
@@ -156,5 +171,13 @@ public class LexicalAnalyzer {
         // System.out.println(lines);  
         
         System.out.println();
+        
+        //Prints the Symbol Table
+        for (Map.Entry<String, List<String>> entry : symbolTable.entrySet()) {
+            String key = entry.getKey();
+            List<String> values = entry.getValue();
+            System.out.print(key + ": ");
+            System.out.println(values);
+        }
     }
 }
