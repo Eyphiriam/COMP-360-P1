@@ -1,0 +1,148 @@
+package lexicalanalyzer;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class Parser {
+
+    public static void main(String[] args) {
+        // Specify the file path for the input file
+        String inputFilePath = "C:\\Users\\jazmi\\OneDrive\\Documents\\COMP 360- Programming Languages Doc\\Project 1\\input.txt";
+
+        // Parse the input file
+        boolean isValid = parseInput(inputFilePath);
+
+        // Print the result
+        if (isValid) {
+            System.out.println("Input file is valid according to the grammar.");
+        } else {
+            System.out.println("Input file contains syntax errors according to the grammar.");
+        }
+    }
+
+    private static boolean parseInput(String filePath) {
+        try {
+            Scanner scanner = new Scanner(new File(filePath));
+
+            // Parse the program according to the grammar
+            if (parseProgram(scanner)) {
+                // If the entire program is parsed successfully, return true
+                return true;
+            } else {
+                // If there are syntax errors in the program, return false
+                return false;
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + filePath);
+            return false;
+        }
+    }
+
+    private static boolean parseProgram(Scanner scanner) {
+        // Check if the next token matches the start symbol "<program>"
+    	if (scanner.hasNext("void")) {
+    		System.out.println("VOID INCLUDED");
+    	    scanner.next(); // Consume the keyword token
+    	    
+    	    if (parseIdent(scanner)) {
+    	        // If parseIdent returns true, proceed to check the next tokens
+    	        String nextToken1 = scanner.next();
+    	        String nextToken2 = scanner.next();
+    	        String nextToken3 = scanner.next();
+    	        System.out.println("CHECK");
+    	        
+    	        if (nextToken1.equals("(") && nextToken2.equals(")") && nextToken3.equals("{")) {
+    	            System.out.println("WORKS");
+    	            // No need to consume more tokens, as we've already retrieved and checked them
+
+    	        	if (parseIdent(scanner) && scanner.next().equals("(") && scanner.next().equals(")") &&
+    	                    scanner.next().equals("{")) {
+    	        		return true;
+    	        	}
+    	            // return true; // Parsing succeeded
+    	        } else {
+    	            return false; // Parsing failed
+    	        }     
+    	    }
+    	    else {
+    	        return false; // Parsing failed
+    	    }
+
+        } else {
+            System.out.println("Expected keyword 'void'");
+            return false;
+        }
+		return false;
+    }
+    
+
+    private static boolean parseDeclares(Scanner scanner) {
+        // Check if the next token matches the non-terminal "<declares>"
+        if (scanner.hasNext("int")) {
+            System.out.println("Found keyword 'int'");
+            scanner.next(); // Consume the keyword token
+            return parseIdent(scanner) && scanner.next().equals("=") && parseConst(scanner) &&
+                    scanner.next().equals(";");
+        } else {
+            System.out.println("Expected keyword 'int'");
+            return false;
+        }
+    }
+
+    private static boolean parseLoop(Scanner scanner) {
+        // Check if the next token matches the non-terminal "<loop>"
+        if (scanner.hasNext("while")) {
+            System.out.println("Found keyword 'while'");
+            scanner.next(); // Consume the "while" keyword token
+            return scanner.next().equals("(") && parseIdent(scanner) && scanner.next().equals(">=") &&
+                    parseConst(scanner) && scanner.next().equals(")");
+        } else {
+            System.out.println("Expected keyword 'while'");
+            return false;
+        }
+    }
+
+    private static boolean parseAssignment(Scanner scanner) {
+        // Check if the next token matches the non-terminal "<assignment>"
+        if (scanner.hasNext("[a-z]")) {
+            System.out.println("Found identifier");
+            scanner.next(); // Consume the identifier token
+            return scanner.next().equals("=") && parseIdent(scanner) &&
+                    scanner.next().equals("-") && parseConst(scanner) &&
+                    scanner.next().equals(";");
+        } else {
+            System.out.println("Expected identifier1");
+            return false;
+        }
+    }
+
+    private static boolean parseIdent(Scanner scanner) {
+        // "<ident>"
+    	while(scanner.hasNext()) {
+    		String character = scanner.next();
+    		
+        if (character.matches("[a-z0-9]+")) {
+            System.out.println("Found identifier");
+            //scanner.next(); // Consume the identifier token
+            return true;
+        } else  {
+            System.out.println("Expected identifier2");
+            return false; 
+        }
+    	}
+        return false;
+    	
+    }
+
+    private static boolean parseConst(Scanner scanner) {
+        // Check if the next token matches the non-terminal "<const>"
+        if (scanner.hasNextInt()) {
+            System.out.println("Found integer constant");
+            scanner.nextInt(); // Consume the integer token
+            return true;
+        } else {
+            System.out.println("Expected integer constant");
+            return false;
+        }
+    }
+}
