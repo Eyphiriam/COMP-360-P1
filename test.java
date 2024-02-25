@@ -28,13 +28,14 @@ public class Test {
             	//Add the Container List to the ArrayList 
             	for (String lexemes: strSplit) {
                     if (!lexemes.isEmpty() && !lexemes.matches("\\s*")) {
-            		System.out.println("The Next Token is: " + lexemes);
+            		System.out.println("The Next Lexeme is: " + lexemes);
             		
             	}
             }
         }
         }
   
+System.out.println("The Tokens: ");
 
     String inputFilePath = "C:\\Users\\matth\\eclipse-workspace\\COMP 360_P1\\src\\input.txt\\";
 
